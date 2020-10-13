@@ -12,7 +12,7 @@ function AddEventListeners()
 	firstCurrency.addEventListener("change", firstToSecondExchange);
 	
 	toAmt.addEventListener("input", secondToFirstExchange);
-	secondCurrency.addEventListener("change", secondToFirstExchange);
+	secondCurrency.addEventListener("change", firstToSecondExchange);
 }
 
 /**
@@ -106,17 +106,17 @@ in the scenario where the user chooses to change the second drop down option/inp
 **/
 function secondToFirstExchange()
 {
-	let fromCurrency = secondCurrency.value;
-	let toCurrency = firstCurrency.value;
+	let fromCurrency = firstCurrency.value;
+	let toCurrency = secondCurrency.value;
 	let rate = 0;
-	toAmt.value = Math.round(toAmt.value*100)/100;
+	fromAmt.value = Math.round(fromAmt.value*100)/100; // limit input to two decimal places by rounding
 	
 	if(toAmt.value>=0 && fromAmt.value>=0 && cachedData != null && cachedData.base == fromCurrency)
 	{
 		rate = cachedData.rates[toCurrency];
-		fromAmt.value = (toAmt.value * rate).toFixed(2);
-		convertText.innerHTML = toAmt.value + " " + fromCurrency + " equals " + 
-							fromAmt.value + " " + toCurrency;
+		fromAmt.value = (toAmt.value / rate).toFixed(2);
+		convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
+							toAmt.value + " " + toCurrency;
 	}
 	else if(toAmt.value>=0 && fromAmt.value>=0)
 	{
@@ -128,9 +128,9 @@ function secondToFirstExchange()
 				{
 					cachedData = data;
 					rate = cachedData.rates[toCurrency];
-					fromAmt.value = (toAmt.value * rate).toFixed(2);
-					convertText.innerHTML = toAmt.value + " " + fromCurrency + " equals " + 
-							fromAmt.value + " " + toCurrency;
+					fromAmt.value = (toAmt.value / rate).toFixed(2);
+					convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
+							toAmt.value + " " + toCurrency;
 				})
 			}
 		catch(e)
