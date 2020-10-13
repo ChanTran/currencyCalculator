@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Currency Exchange Calculator</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	
+	<body>
+		<h1>Currency Exchange Calculator</h1>
+		<div class="container">
+			<div class="firstCurrency">
+				<select id="fromCurrency">
+				</select>
+				<input type="number" id="fromAmt" step=".01" min="0" placeholder="0.00"/>
+			</div>
+			<div class="secondCurrency">
+				<select id="toCurrency">
+				</select>
+				<input type="number" id="toAmt" step=".01" min="0" placeholder="0.00"/>
+			</div>
+			<div class="conversionText">
+				<h2 id="convertText"></h2>
+			</div>
+		</div>
+	
+		<footer>
+			<h5>Data provided by <a href="https://exchangeratesapi.io/">exchangeratesapi.io</a></h5>
+		</footer>
+	</body>
+	<script src="currency.js"></script>
+</html>
