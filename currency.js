@@ -23,6 +23,8 @@ function fetchCurrencies()
 {
 	let selectFrom = document.getElementById("fromCurrency");
 	let selectTo = document.getElementById("toCurrency");
+	let date = document.getElementById("date");
+	
 	try 
 	{
 		fetch(BASE_URL)
@@ -52,6 +54,7 @@ function fetchCurrencies()
 				options.innerHTML = arr[i];
 				selectTo.appendChild(options);
 			}
+			date.innerHTML = "Date: " + data.date;
 		})
 	}
 	catch(e)
