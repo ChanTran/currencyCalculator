@@ -8,11 +8,11 @@ Add event listeners to both the input boxes and the dropdown menus
 **/
 function AddEventListeners()
 {
-	fromAmt.addEventListener("input", firstToSecondExchange);
-	firstCurrency.addEventListener("change", firstToSecondExchange);
+	fromAmt.addEventListener("input", function() { exchange(false); });
+	firstCurrency.addEventListener("change", function() { exchange(false); });
 	
-	toAmt.addEventListener("input", secondToFirstExchange);
-	secondCurrency.addEventListener("change", firstToSecondExchange);
+	toAmt.addEventListener("input", function() { exchange(true); });
+	secondCurrency.addEventListener("change", function() { exchange(false); });
 }
 
 /**
@@ -64,20 +64,37 @@ function fetchCurrencies()
 }
 
 /**
-Grabs the rates in the scenario where the user changes the first input box or first drop down menu
+Grabs the rates in the scenario where the user changes the input box or drop down menus
 Grabs cached data pulled from API if the base currency did not change.
+@param secondRow Boolean to check if input is coming from the first row of input or second row of input. We need to divide by the rate
+in the case where user elects to change the second row's value.
 **/
-function firstToSecondExchange()
+function exchange(secondRow)
 {
 	let fromCurrency = firstCurrency.value;
 	let toCurrency = secondCurrency.value;
 	let rate = 0;
-	fromAmt.value = Math.round(fromAmt.value*100)/100; // limit input to two decimal places by rounding
+	
+	if(secondRow)
+	{
+		toAmt.value = Math.round(toAmt.value*100)/100;
+	}
+	else
+	{
+		fromAmt.value = Math.round(fromAmt.value*100)/100;
+	}
 	
 	if(toAmt.value>=0 && fromAmt.value>=0 && cachedData != null && cachedData.base == fromCurrency)
 	{
 		rate = cachedData.rates[toCurrency];
-		toAmt.value = (fromAmt.value * rate).toFixed(2);
+		if(secondRow)
+		{
+			fromAmt.value = (toAmt.value / rate).toFixed(2);
+		}
+		else
+		{
+			toAmt.value = (fromAmt.value * rate).toFixed(2);
+		}
 		convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
 							toAmt.value + " " + toCurrency;
 	}
@@ -91,47 +108,14 @@ function firstToSecondExchange()
 				{
 					cachedData = data;
 					rate = cachedData.rates[toCurrency];
-					toAmt.value = (fromAmt.value * rate).toFixed(2);
-					convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
-							toAmt.value + " " + toCurrency;
-				})
-			}
-		catch(e)
-		{
-			console.log(e);
-		}		
-	}
-}
-
-/**
-Works the same way as firstToSecondExchange, except that the second input box is now our base currency
-in the scenario where the user chooses to change the second drop down option/input box.
-**/
-function secondToFirstExchange()
-{
-	let fromCurrency = firstCurrency.value;
-	let toCurrency = secondCurrency.value;
-	let rate = 0;
-	toAmt.value = Math.round(toAmt.value*100)/100; // limit input to two decimal places by rounding
-	
-	if(toAmt.value>=0 && fromAmt.value>=0 && cachedData != null && cachedData.base == fromCurrency)
-	{
-		rate = cachedData.rates[toCurrency];
-		fromAmt.value = (toAmt.value / rate).toFixed(2);
-		convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
-							toAmt.value + " " + toCurrency;
-	}
-	else if(toAmt.value>=0 && fromAmt.value>=0)
-	{
-		try
-		{
-			fetch(BASE_URL+"?base="+fromCurrency)
-			.then(result => result.json())
-			.then(function(data)
-				{
-					cachedData = data;
-					rate = cachedData.rates[toCurrency];
-					fromAmt.value = (toAmt.value / rate).toFixed(2);
+					if(secondRow)
+					{
+						fromAmt.value = (toAmt.value / rate).toFixed(2);
+					}
+					else
+					{
+						toAmt.value = (fromAmt.value * rate).toFixed(2);
+					}
 					convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
 							toAmt.value + " " + toCurrency;
 				})
