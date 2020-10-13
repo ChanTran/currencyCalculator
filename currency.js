@@ -75,6 +75,7 @@ function exchange(secondRow)
 	let toCurrency = secondCurrency.value;
 	let rate = 0;
 	
+	//Rounds to two decimal places wherever the input was
 	if(secondRow)
 	{
 		toAmt.value = Math.round(toAmt.value*100)/100;
@@ -84,6 +85,7 @@ function exchange(secondRow)
 		fromAmt.value = Math.round(fromAmt.value*100)/100;
 	}
 	
+	//If the base is the same, use the data from the cached array
 	if(toAmt.value>=0 && fromAmt.value>=0 && cachedData != null && cachedData.base == fromCurrency)
 	{
 		rate = cachedData.rates[toCurrency];
@@ -98,7 +100,7 @@ function exchange(secondRow)
 		convertText.innerHTML = fromAmt.value + " " + fromCurrency + " equals " + 
 							toAmt.value + " " + toCurrency;
 	}
-	else if(toAmt.value>=0 && fromAmt.value>=0)
+	else if(toAmt.value>=0 && fromAmt.value>=0) //Otherwise the base has changed and we need to grab new data for the new base
 	{
 		try
 		{
