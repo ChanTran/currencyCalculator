@@ -109,7 +109,7 @@ function secondToFirstExchange()
 	let fromCurrency = firstCurrency.value;
 	let toCurrency = secondCurrency.value;
 	let rate = 0;
-	fromAmt.value = Math.round(fromAmt.value*100)/100; // limit input to two decimal places by rounding
+	toAmt.value = Math.round(toAmt.value*100)/100; // limit input to two decimal places by rounding
 	
 	if(toAmt.value>=0 && fromAmt.value>=0 && cachedData != null && cachedData.base == fromCurrency)
 	{
